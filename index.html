@@ -45,10 +45,20 @@
 
 <script>
 const KEY = 'lg_country';
+const KEY_HIDE = 'lg_hide_selector'; // new flag
+
+function hideSelector(){
+  document.getElementById('country').style.display = 'none';
+  document.getElementById('saveBtn').style.display = 'none';
+}
 
 function render(){
   const viewer = document.getElementById('viewer');
   viewer.innerHTML = '';
+
+  const hide = localStorage.getItem(KEY_HIDE) === '1';
+  if(hide){ hideSelector(); }
+
   const c = localStorage.getItem(KEY);
   if(!c){ viewer.innerHTML = '<p class="muted">בחר מדינה ולחץ "שמור"</p>'; return; }
 
@@ -75,7 +85,15 @@ function render(){
 document.getElementById('saveBtn').onclick = ()=>{
   const c = document.getElementById('country').value;
   if(c === 'בחר מדינה') return alert('בחר מדינה');
+
   localStorage.setItem(KEY, c);
+
+  if(c !== 'Israel'){
+    // lock selection UI forever
+    localStorage.setItem(KEY_HIDE, '1');
+    hideSelector();
+  }
+
   render();
 };
 
