@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>L Gamest - Geo Blocker</title>
+  <style>
+    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;margin:18px;background:#f7f7fb;color:#111}
+    .card{background:#fff;border-radius:12px;box-shadow:0 6px 18px rgba(20,20,40,0.06);padding:18px;max-width:980px;margin:18px auto}
+    label{display:block;margin:8px 0;font-weight:600}
+    select,input,button{padding:10px;border-radius:8px;border:1px solid #ddd;font-size:15px}
+    iframe{width:100%;height:620px;border:1px solid #ccc;border-radius:8px}
+    .blocked{padding:30px;text-align:center;font-size:18px;color:#7b1020;background:#fff0f0;border-radius:8px}
+    .muted{color:#666;font-size:13px}
+    .small{font-size:13px}
+    .spacer{height:12px}
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h2>L Gamest – Geo Access</h2>
+    <p class="muted">בחר מדינה. רק "Israel" תאפשר גישה לתוכן.</p>
+
+    <label for="country">בחר מדינה</label>
+    <select id="country">
+      <option selected disabled>בחר מדינה</option>
+      <option>Israel</option>
+      <option>Lebanon</option>
+      <option>Syria</option>
+      <option>Iran</option>
+      <option>Iraq</option>
+      <option>Yemen</option>
+      <option>Saudi Arabia</option>
+      <option>Qatar</option>
+      <option>Pakistan</option>
+      <option>Afghanistan</option>
+      <option>Bangladesh</option>
+    </select>
+
+    <button id="saveBtn">שמור</button>
+
+    <div class="spacer"></div>
+    <div id="viewer"></div>
+  </div>
+
+<script>
+const KEY = 'lg_country';
+
+function render(){
+  const viewer = document.getElementById('viewer');
+  viewer.innerHTML = '';
+  const c = localStorage.getItem(KEY);
+  if(!c){ viewer.innerHTML = '<p class="muted">בחר מדינה ולחץ "שמור"</p>'; return; }
+
+  if(c !== 'Israel'){
+    viewer.innerHTML = `<div class='blocked'>L Gamest's internet providers have blocked it in your country (${c}).</div>`;
+    return;
+  }
+
+  const urls = [
+    'https://lgamest478-hub.github.io/L-Gamest/',
+    'https://upload-apk.com/en/mTR0pxU6e1NnonO',
+    'https://cse.google.com/cse?cx=144c8785d3ba64485#gsc.tab=0',
+    'https://www.dailymotion.com/video/x9phev6'
+  ];
+
+  urls.forEach(u=>{
+    const f = document.createElement('iframe');
+    f.src = u;
+    viewer.appendChild(f);
+    viewer.appendChild(document.createElement('br'));
+  });
+}
+
+document.getElementById('saveBtn').onclick = ()=>{
+  const c = document.getElementById('country').value;
+  if(c === 'בחר מדינה') return alert('בחר מדינה');
+  localStorage.setItem(KEY, c);
+  render();
+};
+
+render();
+</script>
+</body>
+</html>
